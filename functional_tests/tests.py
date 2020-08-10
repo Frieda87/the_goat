@@ -1,9 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from django.test import LiveServerTestCase
 import time
 import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -20,7 +21,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has heard about a cool new online to-do app. She goes 
         # to check out its homepage
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # She notices the page title and header mention to-do lists
         # Also gives info on what was actually found if not the right one
@@ -31,32 +32,33 @@ class NewVisitorTest(unittest.TestCase):
 
         # She is invited  to enter a to-do item straight away
         inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a to-do item')
-
+  
         # She types "Buy peacock feathers" into a text box (Edith's hobby)
         # is tying fly-fising lures)
         inputbox.send_keys('Buy peacock feathers')
 
         # When she hits enter, the page updates, and now the page lists
-        # "1:  Buy peacock feathers" as an item in a to-do list table
-
-        # Key class lets us send special keys like ENTER
+        # "1:  Buy peacock feathers" as an item in a to-do list table           # Key class lets us send special keys like ENTER
         inputbox.send_keys(Keys.ENTER)
         time.sleep(3)
-        self.check_for_row_in_list_table('1. Buy peacock feathers') 
 
-        self.assertIn('1. Buy peacock feathers', [row.text for row in rows])
-        self.assertIn('2. Use peacock feathers to make a fly', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy peacock feathers') 
 
         # There is still a text box inviting her to add another item. She 
         # enters "User peacock feathers to make a fly" (Edith is very 
         # methodical)
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Use peacock feathers to make a fly')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(2)
+        
+        self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
+       
         self.fail('Finish the test!')
 
         # The page updates again, and now shows both items on her list...
 
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
+
 
 
 
