@@ -23,10 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+6m1&$hc1&j$qrs@_4t-uvn5(4=t5sxtnxam7pyjvjc&b2@3f4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+TEMPLATE_DEBUG = DEBUG
 
+ALLOWED_HOSTS = ['friedassuperlists-staging.de', 'friedassuperlists.de']
 
 # Application definition
 
