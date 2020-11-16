@@ -40,3 +40,7 @@ class ListAndItemModelsTest(TestCase):
             # to run full validation in django as default is blank=False
             # however, SQLite is not enforcing emptiness constraints
             item.full_clean() 
+    
+    def test_get_absolute_url(self):
+        list_ = List.objects.create()
+        self.assertEqual(list_.get_absolute_url(), f'/lists/{list_.id}/')
